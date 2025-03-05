@@ -1,2 +1,2 @@
-# cargallary-project-backend
-Dotnet Car Gallary Backend Project
+# car-project-backend
+.NET Backend project
