@@ -27,3 +27,7 @@ jobs:
 
     - name: Run tests
       run: dotnet test --no-build --verbosity normal
+
+    - name: Success message 
+      if: success()
+      run: echo "Build and tests were successful!"
