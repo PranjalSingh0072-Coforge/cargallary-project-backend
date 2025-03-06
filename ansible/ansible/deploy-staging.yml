@@ -1,0 +1,29 @@
+- hosts: staging
+  tasks:
+    - name: Pull Docker image
+      docker_image:
+        name: Cargallary-project
+        tag: latest
+        source: pull
+
+    - name: Stop existing container
+      docker_container:
+        name: Cargallary-project
+        state: stopped
+        force_kill: yes
+
+    - name: Remove existing container
+      docker_container:
+        name: Cargallary-project
+        state: absent
+
+    - name: Start new container
+      docker_container:
+        name: Cargallary-project
+        image: your-app:latest
+        state: started
+        ports:
+          - "80:80"
+        env:
+          DATABASE_URL: "Server=LP-TZD-1X127220; Database=DapperDemo"
+          API_KEY: "https://localhost:7162/api/Product"
