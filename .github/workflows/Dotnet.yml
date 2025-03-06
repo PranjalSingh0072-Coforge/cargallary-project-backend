@@ -5,14 +5,13 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 🧑‍💻 Checkout code
-      uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: 👌 Setup .NET
       uses: actions/setup-dotnet@v4
@@ -21,7 +20,7 @@ jobs:
 
     - name: 👍 Restore dependencies
       run: dotnet restore
-
+      
     - name: 👷‍♂️ Build
       run: dotnet build --no-restore
 
@@ -31,3 +30,24 @@ jobs:
     - name: 🔑 Success message 
       if: success()
       run: echo "Build and tests were successful!"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Ansible
+      run: |
+        sudo apt update
+        sudo apt install ansible -y
+
+    - name: Deploy to Staging
+      run: ansible-playbook deploy-staging.yml
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: 'false'
+        ANSIBLE_INVENTORY: 'inventory/staging.ini'
+        ANSIBLE_PRIVATE_KEY_FILE: ${{ secrets.SSH_PRIVATE_KEY }}
+        ANSIBLE_USER: Carproject_0072
