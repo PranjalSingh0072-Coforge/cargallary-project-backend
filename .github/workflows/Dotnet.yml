@@ -44,8 +44,13 @@ jobs:
         sudo apt update
         sudo apt install ansible -y
 
+        
+    - name: 🔑 Success message 
+      if: success()
+      run: echo "Deploy were successful!"
+
     - name: Deploy to Staging
-      run: ansible-playbook deploy-staging.yml
+      run: ansible-playbook ansible/deploy-staging.yml -i ansible/inventory/staging.ini
       env:
         ANSIBLE_HOST_KEY_CHECKING: 'false'
         ANSIBLE_INVENTORY: 'inventory/staging.ini'
